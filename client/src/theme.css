@@ -1,0 +1,93 @@
+:root {
+  --color-primary: #1976D2;
+  --color-primary-dark: #115293;
+  --color-secondary: #43A047;
+  --color-accent: #FFC107;
+  --color-background: #F5F7FA;
+  --color-surface: #FFFFFF;
+  --color-text: #222;
+  --color-muted: #6c757d;
+  --color-danger: #D32F2F;
+  --color-success: #388E3C;
+  --color-info: #0288D1;
+  --color-warning: #FFA000;
+
+  --font-heading: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  --font-body: 'Roboto', 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+}
+
+.card {
+  background: var(--color-surface);
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+}
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-success {
+  background: var(--color-success);
+  color: #fff;
+  border: none;
+}
+.btn-success:hover {
+  background: #256029;
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: #fff;
+  border: none;
+}
+.btn-secondary:hover {
+  background: #2e7031;
+}
+
+.btn-warning {
+  background: var(--color-accent);
+  color: #222;
+  border: none;
+}
+
+a {
+  color: var(--color-primary);
+}
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+.alert-success {
+  background: var(--color-success);
+  color: #fff;
+}
+
+.alert-danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.alert-info {
+  background: var(--color-info);
+  color: #fff;
+}
+
+.alert-warning {
+  background: var(--color-warning);
+  color: #fff;
+} 
