@@ -12,9 +12,11 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const fetchGallery = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/gallery");
+      const res = await axios.get(`${API_BASE_URL}/api/gallery`);
       setImages(res.data);
     } catch (err) {
       setError("Failed to load gallery.");

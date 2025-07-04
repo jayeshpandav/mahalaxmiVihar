@@ -13,13 +13,15 @@ const Register = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
     setSubmitting(true);
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { username, password }, { withCredentials: true });
+      await axios.post(`${API_BASE_URL}/api/auth/register`, { username, password }, { withCredentials: true });
       // Auto-login after successful registration
       try {
         await login(username, password);

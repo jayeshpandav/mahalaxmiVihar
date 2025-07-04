@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-console.log('JWT_SECRET in middleware:', JWT_SECRET);
+// console.log('JWT_SECRET in middleware:', JWT_SECRET);
 // Register new user
 exports.register = async (req, res) => {
     try {
