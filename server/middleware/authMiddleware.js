@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 // console.log('JWT_SECRET in controller:', JWT_SECRET);
@@ -7,13 +6,21 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 exports.authenticateToken = async (req, res, next) => {
   try {
     const token = req.cookies.token || (req.headers['authorization'] && req.headers['authorization'].split(' ')[1]);
-    if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
     
+    // Debug logging
+    console.log('Token from cookie:', req.cookies.token);
+    console.log('Token from header:', req.headers['authorization']);
+    console.log('Final token used:', token);
+    console.log('Token type:', typeof token);
+    console.log('Token length:', token ? token.length : 0);
+    
+    if (!token) {
+      return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+    
+    // Simple JWT verification without database lookup
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    
-    req.user = { id: user._id, username: user.username, role: user.role };
+    req.user = decoded; // Use the decoded JWT payload directly
     next();
   } catch (err) {
     console.log('JWT error:', err);
