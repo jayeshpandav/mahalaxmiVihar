@@ -45,7 +45,7 @@ const TenderList = () => {
   useEffect(() => {
     fetchTenders();
     fetchUserSubmissions();
-    
+
     // Update current time every minute
     const interval = setInterval(() => {
       setNow(new Date());
@@ -119,7 +119,7 @@ const TenderList = () => {
               const isOpen = now >= startDate && now <= endDate;
               const userSubmitted = hasUserSubmitted(tender._id);
               const userSubmission = getUserSubmission(tender._id);
-              
+
               return (
                 <tr key={tender._id}>
                   <td>{tender.title}</td>
@@ -163,20 +163,20 @@ const TenderList = () => {
                     {user && user.role === 'user' && isOpen && userSubmitted && (
                       <div>
                         <span className="text-success d-block mb-1">✓ Submitted</span>
-                        {userSubmission && userSubmission.fileUrl && (
-                          <Button
-                            size="sm"
-                            variant="info"
-                            as="a"
+                        {userSubmission?.fileUrl && (
+                          <a
                             href={userSubmission.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="btn btn-info btn-sm"
+                            role="button"
                           >
                             View My Submission
-                          </Button>
+                          </a>
                         )}
                       </div>
                     )}
+
                     {user && user.role === 'user' && !isOpen && (
                       <span className="text-danger">Tender submission closed</span>
                     )}
