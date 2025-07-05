@@ -10,6 +10,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const TenderList = () => {
   const { user, token } = useContext(AuthContext);
   const [tenders, setTenders] = useState([]);
+  const [userSubmissions, setUserSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -28,16 +29,30 @@ const TenderList = () => {
     }
   };
 
+  const fetchUserSubmissions = async () => {
+    if (user && user.role === 'user') {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/tender-submissions/user/submissions`, {
+          withCredentials: true
+        });
+        setUserSubmissions(res.data);
+      } catch (err) {
+        console.error('Failed to fetch user submissions:', err);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchTenders();
-
+    fetchUserSubmissions();
+    
     // Update current time every minute
     const interval = setInterval(() => {
       setNow(new Date());
     }, 60000); // 60000ms = 1 minute
 
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this tender?')) return;
@@ -53,6 +68,14 @@ const TenderList = () => {
     } finally {
       setDeletingId(null);
     }
+  };
+
+  const hasUserSubmitted = (tenderId) => {
+    return userSubmissions.some(submission => submission.tender._id === tenderId);
+  };
+
+  const getUserSubmission = (tenderId) => {
+    return userSubmissions.find(submission => submission.tender._id === tenderId);
   };
 
   return (
@@ -94,16 +117,9 @@ const TenderList = () => {
               const startDate = new Date(tender.startDate);
               const endDate = new Date(tender.endDate);
               const isOpen = now >= startDate && now <= endDate;
-
-              // Debug logging
-              // console.log('Current time:', now.toLocaleString());
-              // console.log('Tender:', tender.title);
-              // console.log('Start date:', startDate.toLocaleString());
-              // console.log('End date:', endDate.toLocaleString());
-              // console.log('Is open:', isOpen);
-              // console.log('Now >= startDate:', now >= startDate);
-              // console.log('Now <= endDate:', now <= endDate);
-
+              const userSubmitted = hasUserSubmitted(tender._id);
+              const userSubmission = getUserSubmission(tender._id);
+              
               return (
                 <tr key={tender._id}>
                   <td>{tender.title}</td>
@@ -139,10 +155,30 @@ const TenderList = () => {
                     {!user && (
                       <span className="text-danger">Please login to submit tender</span>
                     )}
-                    {user && user.role === 'user' && isOpen && (
+                    {user && user.role === 'user' && isOpen && !userSubmitted && (
                       <Button size="sm" variant="success" onClick={() => navigate(`/submitTender/${tender._id}`)}>
                         Submit
                       </Button>
+                    )}
+                    {user && user.role === 'user' && isOpen && userSubmitted && (
+                      <div>
+                        <span className="text-success d-block mb-1">✓ Submitted</span>
+                        {userSubmission && userSubmission.fileUrl && (
+                          <Button
+                            size="sm"
+                            variant="info"
+                            as="a"
+                            href={userSubmission.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View My Submission
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                    {user && user.role === 'user' && !isOpen && (
+                      <span className="text-danger">Tender submission closed</span>
                     )}
                     {user && user.role === 'admin' && (
                       <>
@@ -159,7 +195,7 @@ const TenderList = () => {
                         </Button>
                       </>
                     )}
-                    {!isOpen && <span className="text-danger">Closed</span>}
+                    {!user && !isOpen && <span className="text-danger">Closed</span>}
                   </td>
                 </tr>
               );
