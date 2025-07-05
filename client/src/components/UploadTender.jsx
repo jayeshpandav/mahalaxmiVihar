@@ -35,7 +35,10 @@ const UploadTender = ({ onSuccess, onClose }) => {
         formData,
         {
           withCredentials: true,
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+          headers: {
+            // Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
         }
       );
       setSuccess('Tender created successfully!');

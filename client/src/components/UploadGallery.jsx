@@ -23,7 +23,7 @@ const UploadGallery = ({ onSuccess, onClose }) => {
       await axios.post(`${API_BASE_URL}/api/gallery/upload`, formData, {
         withCredentials: true,
         headers: {
-          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });

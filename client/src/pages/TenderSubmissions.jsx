@@ -18,7 +18,8 @@ const TenderSubmissions = () => {
     const fetchSubmissions = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/tender-submissions/${tenderId}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+          // headers: { Authorization: `Bearer ${token}` },
         });
         setSubmissions(res.data);
       } catch (err) {

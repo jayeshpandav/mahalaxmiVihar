@@ -34,8 +34,9 @@ const SubmitTender = () => {
     formData.append('file', file);
     try {
       await axios.post(`${API_BASE_URL}/api/tender-submissions`, formData, {
+        withCredentials: true,
         headers: {
-          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });
