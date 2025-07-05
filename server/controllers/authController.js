@@ -35,8 +35,8 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'strict',
+      secure: true,
+      sameSite: 'none',
       path: '/',
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     });
@@ -50,8 +50,8 @@ exports.login = async (req, res) => {
 exports.logout = (req, res) => {
   res.clearCookie('token', {
     httpOnly: true,
-    secure: false,
-    sameSite: 'strict',
+    secure: true,
+    sameSite: 'none',
     path: '/',
   });
   res.json({ message: 'Logged out successfully' });
