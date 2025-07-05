@@ -4,17 +4,32 @@ exports.createTender = async (req, res) => {
   try {
     const { title, description, startDate, endDate } = req.body;
     const fileUrl = req.file ? req.file.path : undefined;
+    
+    // Parse dates properly to handle timezone issues
+    const parsedStartDate = new Date(startDate);
+    const parsedEndDate = new Date(endDate);
+    
+    // Validate dates
+    if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid date format' });
+    }
+    
+    if (parsedStartDate >= parsedEndDate) {
+      return res.status(400).json({ message: 'End date must be after start date' });
+    }
+    
     const tender = new Tender({
       title,
       description,
-      startDate,
-      endDate,
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
       fileUrl,
       createdBy: req.user.id
     });
     await tender.save();
     res.status(201).json(tender);
   } catch (err) {
+    console.error('Create tender error:', err);
     res.status(500).json({ message: 'Failed to create tender' });
   }
 };

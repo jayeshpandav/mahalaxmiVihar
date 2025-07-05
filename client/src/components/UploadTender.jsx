@@ -23,6 +23,21 @@ const UploadTender = ({ onSuccess, onClose }) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    
+    // Validate dates
+    if (!startDate || !endDate) {
+      setError('Please select both start and end dates');
+      return;
+    }
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    if (start >= end) {
+      setError('End date must be after start date');
+      return;
+    }
+    
     try {
       const formData = new FormData();
       formData.append('title', title);
