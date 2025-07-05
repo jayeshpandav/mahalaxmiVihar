@@ -96,13 +96,13 @@ const TenderList = () => {
               const isOpen = now >= startDate && now <= endDate;
 
               // Debug logging
-              console.log('Current time:', now.toLocaleString());
-              console.log('Tender:', tender.title);
-              console.log('Start date:', startDate.toLocaleString());
-              console.log('End date:', endDate.toLocaleString());
-              console.log('Is open:', isOpen);
-              console.log('Now >= startDate:', now >= startDate);
-              console.log('Now <= endDate:', now <= endDate);
+              // console.log('Current time:', now.toLocaleString());
+              // console.log('Tender:', tender.title);
+              // console.log('Start date:', startDate.toLocaleString());
+              // console.log('End date:', endDate.toLocaleString());
+              // console.log('Is open:', isOpen);
+              // console.log('Now >= startDate:', now >= startDate);
+              // console.log('Now <= endDate:', now <= endDate);
 
               return (
                 <tr key={tender._id}>
