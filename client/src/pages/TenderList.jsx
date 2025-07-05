@@ -125,6 +125,9 @@ const TenderList = () => {
                     )}
                   </td>
                   <td className="d-flex flex-column gap-2">
+                    {!user && (
+                      <span className="text-danger">Please login to submit tender</span>
+                    )}
                     {user && user.role === 'user' && isOpen && (
                       <Button size="sm" variant="success" onClick={() => navigate(`/submitTender/${tender._id}`)}>
                         Submit
@@ -145,7 +148,7 @@ const TenderList = () => {
                         </Button>
                       </>
                     )}
-                    {!user && !isOpen && <span className="text-danger">Closed</span>}
+                    {!isOpen && <span className="text-danger">Closed</span>}
                   </td>
                 </tr>
               );
