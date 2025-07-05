@@ -30,7 +30,7 @@ const TenderList = () => {
 
   useEffect(() => {
     fetchTenders();
-    
+
     // Update current time every minute
     const interval = setInterval(() => {
       setNow(new Date());
@@ -94,7 +94,7 @@ const TenderList = () => {
               const startDate = new Date(tender.startDate);
               const endDate = new Date(tender.endDate);
               const isOpen = now >= startDate && now <= endDate;
-              
+
               // Debug logging
               console.log('Current time:', now.toLocaleString());
               console.log('Tender:', tender.title);
@@ -103,13 +103,24 @@ const TenderList = () => {
               console.log('Is open:', isOpen);
               console.log('Now >= startDate:', now >= startDate);
               console.log('Now <= endDate:', now <= endDate);
-              
+
               return (
                 <tr key={tender._id}>
                   <td>{tender.title}</td>
                   <td>{tender.description}</td>
-                  <td>{startDate.toLocaleString()}</td>
-                  <td>{endDate.toLocaleString()}</td>
+                  <td>
+                    {startDate.toLocaleString('en-IN', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
+                  </td>
+                  <td>
+                    {endDate.toLocaleString('en-IN', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
+                  </td>
+
                   <td>
                     {tender.fileUrl && (
                       <Button
