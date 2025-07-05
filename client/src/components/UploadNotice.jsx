@@ -25,6 +25,7 @@ const UploadNotice = ({ onSuccess, onClose }) => {
     if (file) formData.append('file', file);
     try {
       await axios.post(`${API_BASE_URL}/api/notices/upload`, formData, {
+        withCredentials: true,
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
