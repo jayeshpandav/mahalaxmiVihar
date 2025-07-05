@@ -15,6 +15,7 @@ const TenderList = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [deletingId, setDeletingId] = useState(null);
+  const [now, setNow] = useState(new Date());
 
   const fetchTenders = async () => {
     try {
@@ -29,16 +30,22 @@ const TenderList = () => {
 
   useEffect(() => {
     fetchTenders();
-  }, []);
+    
+    // Update current time every minute
+    const interval = setInterval(() => {
+      setNow(new Date());
+    }, 60000); // 60000ms = 1 minute
 
-  const now = new Date();
+    return () => clearInterval(interval);
+  }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this tender?')) return;
     setDeletingId(id);
     try {
       await axios.delete(`${API_BASE_URL}/api/tenders/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+        // headers: { Authorization: `Bearer ${token}` },
       });
       await fetchTenders();
     } catch (err) {
@@ -84,13 +91,25 @@ const TenderList = () => {
           </thead>
           <tbody>
             {tenders.map(tender => {
-              const isOpen = now >= new Date(tender.startDate) && now <= new Date(tender.endDate);
+              const startDate = new Date(tender.startDate);
+              const endDate = new Date(tender.endDate);
+              const isOpen = now >= startDate && now <= endDate;
+              
+              // Debug logging
+              console.log('Current time:', now.toLocaleString());
+              console.log('Tender:', tender.title);
+              console.log('Start date:', startDate.toLocaleString());
+              console.log('End date:', endDate.toLocaleString());
+              console.log('Is open:', isOpen);
+              console.log('Now >= startDate:', now >= startDate);
+              console.log('Now <= endDate:', now <= endDate);
+              
               return (
                 <tr key={tender._id}>
                   <td>{tender.title}</td>
                   <td>{tender.description}</td>
-                  <td>{new Date(tender.startDate).toLocaleString()}</td>
-                  <td>{new Date(tender.endDate).toLocaleString()}</td>
+                  <td>{startDate.toLocaleString()}</td>
+                  <td>{endDate.toLocaleString()}</td>
                   <td>
                     {tender.fileUrl && (
                       <Button
@@ -126,7 +145,7 @@ const TenderList = () => {
                         </Button>
                       </>
                     )}
-                    {!isOpen && <span className="text-danger">Closed</span>}
+                    {!user && !isOpen && <span className="text-danger">Closed</span>}
                   </td>
                 </tr>
               );
